@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+{% block title %}
+    Daftar Buku
+{% endblock %}
+{% block body %}
+    <style>
+    .grid-container {
+      --auto-grid-min-size: 16rem;
+
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(var(--auto-grid-min-size), 1fr));
+      grid-gap: 1rem;
+    }
+    </style>
+    <script>
+        const search = (e)=>{
+            e.preventDefault()
+            let name = document.getElementById("name").value
+            fetch(`${window.location.origin}/buku/raw?query=${name}`).then((res)=>res.json().then((data)=>{
+                let result = document.getElementById("result")
+                result.innerHTML=""
+                let resultarray = []
+                data.forEach((apaaja)=>{
+                    if(apaaja.fields.judul.toLowerCase().includes(name.toLowerCase())){
+                        resultarray.push(apaaja)
+                    }
+                })
+            resultarray.forEach((buku)=>{
+                result.innerHTML+=`
+                <a href="${window.location.origin}/buku/${buku.pk}">
+			        <div style="text-align: center">
+                        <img src="${ buku.fields.url_sampul }" style="max-width: 100%; max-height: 150px"><br>
+                        <span style="font-weight: bold">${ buku.fields.judul }</span><br>
+                        <span style="font-weight: bold">${ buku.fields.penulis }</span><br>
+			        </div>
+		        </a>`
+            })
+            }
+            )
+        )
+        }
+    </script>
+    <body>
+        <h1>Daftar Buku</h1>
+        <form>
+            <label for="name">Cari Buku:</label><br>
+            <input type="text" id="name" name="name" onkeyup="search(event)" placeholder="Ketik nama buku..."><br>
+        </form>
+        <div class="grid-container" style="width: 100%; margin-top:2em" id="result">
+            <div></div>
+        </div>
+    <script>
+        const preload = (e) =>{
+            console.log("yes")
+            fetch(`${window.location.origin}/buku/raw`).then((res)=>res.json().then((data)=> {
+                let result = document.getElementById("result")
+                result.innerHTML=""
+                let resultarray = []
+                data.forEach((apaaja)=>{
+                    resultarray.push(apaaja)
+                }
+            )
+                resultarray.forEach((buku)=>{
+                result.innerHTML+=`
+                <a href="${window.location.origin}/buku/${buku.pk}">
+			        <div style="text-align: center">
+                        <img
+                            src="${ buku.fields.url_sampul }"
+                            alt="Sampul buku ${ buku.fields.judul }"
+                            style="max-width: 100%; max-height: 150px"
+                            onerror="this.onerror=null; this.src='https://via.placeholder.com/320x512.png?text=Sampul+Tidak+Tersedia'"
+                        ><br>
+                        <span style="font-weight: bold">${ buku.fields.judul }</span><br>
+                        <span style="font-weight: bold">${ buku.fields.penulis }</span><br>
+			        </div>
+		        </a>`
+            }
+            )}))}
+        preload()
+    </script>
+    </body>
+
+
+{% endblock %}

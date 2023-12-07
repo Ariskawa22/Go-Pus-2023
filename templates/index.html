@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    {% block title %}
+        Go Pus
+    {% endblock %}
+</head>
+<body>
+    {% block body %}
+        <div class="welcome-message">
+        <br>
+            <span style="font-size: 2em">Selamat datang di aplikasi Go-Pus!</span>
+            <div>
+                <div>Jumlah koleksi: {{ jumlah_koleksi }}</div>
+                <div>Jumlah buku: {{ jumlah_buku }}</div>
+                <div>Jumlah buku tersedia: {{ jumlah_buku_tersedia }} </div>
+            </div>
+        </div>
+    {% endblock %}
+    
+</body>
+</html>
